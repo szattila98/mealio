@@ -7,9 +7,12 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "strict": true
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "skipLibCheck": true
   },
-
   "references": [
     {
       "path": "./tsconfig.vite-config.json"

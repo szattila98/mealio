@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MealConfig from "@/components/MealConfig.vue";
+</script>
 
 <template>
-  <main>Hello World!</main>
+  <MealConfig />
 </template>

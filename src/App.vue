@@ -4,9 +4,6 @@ import { RouterView } from "vue-router";
 
 <template>
   <header></header>
-
-  <PrimeButton>valami</PrimeButton>
-
   <RouterView />
 </template>
 
