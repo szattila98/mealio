@@ -1,4 +1,4 @@
-import type { MealPlan } from "@/app";
+import type { Meal, MealPlan } from "@/app";
 
 import axios from "@/config/axios.config";
 
@@ -15,5 +15,12 @@ export const getMealPlan = async (
     url = `/mealplanner/generate?apiKey=${apiKey}&targetCalories=${targetCalories}&timeFrame=day}`;
   }
   const res = await axios.get<MealPlan>(url);
+  return res.data;
+};
+
+export const getMealInfo = async (mealId: number): Promise<Meal> => {
+  const res = await axios.get<Meal>(
+    `https://api.spoonacular.com/recipes/${mealId}/information?apiKey=${apiKey}&includeNutrition=true`
+  );
   return res.data;
 };

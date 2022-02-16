@@ -9,6 +9,8 @@ import InputNumber from "primevue/inputnumber";
 import RadioButton from "primevue/radiobutton";
 import Button from "primevue/button";
 
+import MealCard from "@/components/MealCard.vue";
+
 const targetCalories = ref<number>(2000);
 const menuOption = ref<string>("");
 const plannedMeals = ref<MealPlan | null>(null);
@@ -91,11 +93,12 @@ function fetch_meals() {
         <Button label="Get meals" @click="fetch_meals" />
       </div>
     </div>
-    <ul>
-      <li v-for="(meal, index) in plannedMeals?.meals" v-bind:key="index">
-        {{ index }} - {{ meal.id }} - {{ meal.title }}
-      </li>
-    </ul>
+
+    <MealCard
+      v-for="(meal, index) in plannedMeals?.meals"
+      v-bind:key="index"
+      :mealId="meal.id"
+    />
   </div>
 </template>
 
