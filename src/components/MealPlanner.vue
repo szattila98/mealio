@@ -25,24 +25,20 @@ function fetch_meals() {
 
 <template>
   <div>
-    <h2>Target Calories</h2>
     <div class="grid p-fluid">
-      <div class="col-12">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-hashtag"></i>
-          </span>
+      <div class="col-6 col-offset-3 p-fluid grid formgrid">
+        <div class="field col-12">
+          <label for="targetCalories">Target Calories</label>
           <InputNumber
-            placeholder="Calorie target"
-            mode="decimal"
+            id="targetCalories"
             v-model="targetCalories"
+            mode="decimal"
           />
         </div>
       </div>
 
-      <h2>Menu Options</h2>
-      <div class="col-12 grid p-fluid">
-        <div class="field-radiobutton col">
+      <div class="col-6 col-offset-3 flex justify-content-evenly flex-wrap">
+        <div class="field-radiobutton">
           <RadioButton
             id="standard"
             name="standard"
@@ -51,7 +47,7 @@ function fetch_meals() {
           />
           <label for="standard">Standard</label>
         </div>
-        <div class="field-radiobutton col">
+        <div class="field-radiobutton">
           <RadioButton
             id="vegetarian"
             name="vegetarian"
@@ -60,7 +56,7 @@ function fetch_meals() {
           />
           <label for="vegetarian">Vegetarian</label>
         </div>
-        <div class="field-radiobutton col">
+        <div class="field-radiobutton">
           <RadioButton
             id="vegan"
             name="vegan"
@@ -69,7 +65,7 @@ function fetch_meals() {
           />
           <label for="vegan">Vegan</label>
         </div>
-        <div class="field-radiobutton col">
+        <div class="field-radiobutton">
           <RadioButton
             id="keto"
             name="keto"
@@ -78,7 +74,7 @@ function fetch_meals() {
           />
           <label for="ketogenic">Keto</label>
         </div>
-        <div class="field-radiobutton col">
+        <div class="field-radiobutton">
           <RadioButton
             id="gluten-free"
             name="gluten-free"
@@ -89,16 +85,19 @@ function fetch_meals() {
         </div>
       </div>
 
-      <div class="col-12">
+      <div class="col-6 col-offset-3">
         <Button label="Get meals" @click="fetch_meals" />
       </div>
     </div>
 
-    <MealCard
-      v-for="(meal, index) in plannedMeals?.meals"
-      v-bind:key="index"
-      :mealId="meal.id"
-    />
+    <div class="col-10 col-offset-1 flex justify-content-center flex-wrap">
+      <MealCard
+        class="m-3"
+        v-for="(meal, index) in plannedMeals?.meals"
+        v-bind:key="index"
+        :mealId="meal.id"
+      />
+    </div>
   </div>
 </template>
 
