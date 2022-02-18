@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import MealPlanner from "@/components/MealPlanner.vue";
+import MealPlannerForm from "@/components/MealPlannerForm.vue";
 </script>
 
 <template>
-  <MealPlanner />
+  <MealPlannerForm />
 </template>

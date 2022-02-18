@@ -90,6 +90,18 @@ function fetch_meals() {
       </div>
     </div>
 
+    <div
+      class="col-8 col-offset-2 flex justify-content-between flex-wrap"
+      v-if="plannedMeals?.nutrients"
+    >
+      <span><b>Calories:</b> {{ plannedMeals.nutrients.calories }} kcal</span>
+      <span
+        ><b>Carbohydrates:</b> {{ plannedMeals.nutrients.carbohydrates }}g</span
+      >
+      <span><b>Fat:</b> {{ plannedMeals.nutrients.fat }}g</span>
+      <span><b>Protein:</b> {{ plannedMeals.nutrients.protein }}g</span>
+    </div>
+
     <div class="col-10 col-offset-1 flex justify-content-center flex-wrap">
       <MealCard
         class="m-3"
