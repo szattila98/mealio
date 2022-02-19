@@ -1,26 +1,31 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { MealPlan } from "@/app";
-
-import { getMealPlan } from "@/api/spoonacular";
-
 import InputNumber from "primevue/inputnumber";
 import RadioButton from "primevue/radiobutton";
 import Button from "primevue/button";
 
-import MealCard from "@/components/MealCard.vue";
-
-const targetCalories = ref<number>(2000);
-const menuOption = ref<string>("");
-const plannedMeals = ref<MealPlan | null>(null);
-
-function fetch_meals() {
-  plannedMeals.value = null;
-  getMealPlan(targetCalories.value, menuOption.value).then((data) => {
-    plannedMeals.value = data;
-  });
+enum MenuOption {
+  Standard = "",
+  Vegetarian = "vegetarian",
+  Vegan = "vegan",
+  Ketogenic = "ketogenic",
+  GlutenFree = "gluten-free",
 }
+
+interface MealPlanInfo {
+  targetCalories: number;
+  menuOption: MenuOption;
+}
+
+const mealPlanInfo = ref<MealPlanInfo>({
+  targetCalories: 2000,
+  menuOption: MenuOption.Standard,
+});
+
+defineEmits<{
+  (e: "meal-plan", info: MealPlanInfo): void;
+}>();
 </script>
 
 <template>
@@ -31,7 +36,7 @@ function fetch_meals() {
           <label for="targetCalories">Target Calories</label>
           <InputNumber
             id="targetCalories"
-            v-model="targetCalories"
+            v-model="mealPlanInfo.targetCalories"
             mode="decimal"
           />
         </div>
@@ -41,74 +46,48 @@ function fetch_meals() {
         <div class="field-radiobutton">
           <RadioButton
             id="standard"
-            name="standard"
-            value=""
-            v-model="menuOption"
+            :value="MenuOption.Standard"
+            v-model="mealPlanInfo.menuOption"
           />
           <label for="standard">Standard</label>
         </div>
         <div class="field-radiobutton">
           <RadioButton
             id="vegetarian"
-            name="vegetarian"
-            value="vegetarian"
-            v-model="menuOption"
+            :value="MenuOption.Vegetarian"
+            v-model="mealPlanInfo.menuOption"
           />
           <label for="vegetarian">Vegetarian</label>
         </div>
         <div class="field-radiobutton">
           <RadioButton
             id="vegan"
-            name="vegan"
-            value="vegan"
-            v-model="menuOption"
+            :value="MenuOption.Vegan"
+            v-model="mealPlanInfo.menuOption"
           />
           <label for="vegan">Vegan</label>
         </div>
         <div class="field-radiobutton">
           <RadioButton
-            id="keto"
-            name="keto"
-            value="keto"
-            v-model="menuOption"
+            id="ketogenic"
+            :value="MenuOption.Ketogenic"
+            v-model="mealPlanInfo.menuOption"
           />
           <label for="ketogenic">Keto</label>
         </div>
         <div class="field-radiobutton">
           <RadioButton
             id="gluten-free"
-            name="gluten-free"
-            value="gluten-free"
-            v-model="menuOption"
+            :value="MenuOption.GlutenFree"
+            v-model="mealPlanInfo.menuOption"
           />
           <label for="gluten-free">Gluten Free</label>
         </div>
       </div>
 
       <div class="col-6 col-offset-3">
-        <Button label="Get meals" @click="fetch_meals" />
+        <Button label="Get meals" @click="$emit('meal-plan', mealPlanInfo)" />
       </div>
-    </div>
-
-    <div
-      class="col-8 col-offset-2 flex justify-content-between flex-wrap"
-      v-if="plannedMeals?.nutrients"
-    >
-      <span><b>Calories:</b> {{ plannedMeals.nutrients.calories }} kcal</span>
-      <span
-        ><b>Carbohydrates:</b> {{ plannedMeals.nutrients.carbohydrates }}g</span
-      >
-      <span><b>Fat:</b> {{ plannedMeals.nutrients.fat }}g</span>
-      <span><b>Protein:</b> {{ plannedMeals.nutrients.protein }}g</span>
-    </div>
-
-    <div class="col-10 col-offset-1 flex justify-content-center flex-wrap">
-      <MealCard
-        class="m-3"
-        v-for="(meal, index) in plannedMeals?.meals"
-        v-bind:key="index"
-        :mealId="meal.id"
-      />
     </div>
   </div>
 </template>

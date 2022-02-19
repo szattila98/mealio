@@ -68,7 +68,7 @@ export interface WinePairing {
   productMatches: ProductMatch[];
 }
 
-export interface Meal {
+export interface DetailedMeal {
   id: number;
   title: string;
   image: string;

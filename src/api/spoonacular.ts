@@ -1,4 +1,4 @@
-import type { Meal, MealPlan } from "@/app";
+import type { DetailedMeal, MealPlan } from "@/app";
 
 import axios from "@/config/axios.config";
 
@@ -18,9 +18,12 @@ export const getMealPlan = async (
   return res.data;
 };
 
-export const getMealInfo = async (mealId: number): Promise<Meal> => {
-  const res = await axios.get<Meal>(
-    `https://api.spoonacular.com/recipes/${mealId}/information?apiKey=${apiKey}&includeNutrition=true`
+export const getMealInfoBulk = async (
+  mealIds: number[]
+): Promise<DetailedMeal[]> => {
+  const mealIdsJoined = mealIds.join(",");
+  const res = await axios.get<DetailedMeal[]>(
+    `https://api.spoonacular.com/recipes/informationBulk?apiKey=${apiKey}&ids=${mealIdsJoined}&includeNutrition=true`
   );
   return res.data;
 };
