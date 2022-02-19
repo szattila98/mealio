@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Button from "primevue/button";
+import Divider from "primevue/divider";
 import MealPlannerForm from "@/components/MealPlannerForm.vue";
 import MealCard from "@/components/MealCard.vue";
+import MealDetails from "../components/MealDetails.vue";
 import { useMeals } from "@/stores/mealStore";
-import { getMealInfoBulk, getMealPlan } from "@/api/spoonacular";
+import {
+  getMealInfoBulk,
+  getMealPlan,
+  getNutritionWidgetHtml,
+} from "@/api/spoonacular";
+import type { DetailedMeal } from "@/app";
 
 const showForm = ref<boolean>(true);
+const mealDetailToShow = ref<DetailedMeal | null>(null);
 
 const mealStore = useMeals();
 
@@ -17,9 +25,11 @@ function toggleShowForm() {
 function deleteMenu() {
   mealStore.$reset();
   showForm.value = true;
+  mealDetailToShow.value = null;
 }
 
 function fetch_meals(targetCalories: number, menuOption: string) {
+  mealDetailToShow.value = null;
   showForm.value = false;
   mealStore.$reset();
   getMealPlan(targetCalories, menuOption)
@@ -33,6 +43,19 @@ function fetch_meals(targetCalories: number, menuOption: string) {
         });
       }
     });
+}
+
+function showDetails(meal: DetailedMeal) {
+  if (mealDetailToShow.value === meal) {
+    mealDetailToShow.value = null;
+  } else {
+    if (!meal.nutritionWidgetHtml) {
+      getNutritionWidgetHtml(meal.id).then(
+        (data) => (meal.nutritionWidgetHtml = data)
+      );
+    }
+    mealDetailToShow.value = meal;
+  }
 }
 </script>
 
@@ -60,7 +83,7 @@ function fetch_meals(targetCalories: number, menuOption: string) {
     />
   </div>
 
-  <div v-if="showForm">
+  <div v-if="showForm" class="mt-6">
     <MealPlannerForm
       @meal-plan="
         (mealPlanInfo) => {
@@ -98,7 +121,15 @@ function fetch_meals(targetCalories: number, menuOption: string) {
         v-for="(meal, index) in mealStore.detailedMeals"
         v-bind:key="index"
         :meal="meal"
+        @card-click="showDetails"
       />
+    </div>
+
+    <div v-if="mealDetailToShow">
+      <Divider align="center" layout="horizontal">
+        <b>Details</b>
+      </Divider>
+      <MealDetails :meal="mealDetailToShow" />
     </div>
   </div>
 </template>

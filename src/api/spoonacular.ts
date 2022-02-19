@@ -23,7 +23,16 @@ export const getMealInfoBulk = async (
 ): Promise<DetailedMeal[]> => {
   const mealIdsJoined = mealIds.join(",");
   const res = await axios.get<DetailedMeal[]>(
-    `https://api.spoonacular.com/recipes/informationBulk?apiKey=${apiKey}&ids=${mealIdsJoined}&includeNutrition=true`
+    `https://api.spoonacular.com/recipes/informationBulk?apiKey=${apiKey}&ids=${mealIdsJoined}&includeNutrition=true` // TODO no nutrition
+  );
+  return res.data;
+};
+
+export const getNutritionWidgetHtml = async (
+  mealId: number
+): Promise<string> => {
+  const res = await axios.get<string>(
+    `https://api.spoonacular.com/recipes/${mealId}/nutritionLabel?apiKey=${apiKey}`
   );
   return res.data;
 };

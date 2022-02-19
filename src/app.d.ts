@@ -83,7 +83,6 @@ export interface DetailedMeal {
   healthScore: number;
   spoonacularScore: number;
   pricePerServing: number;
-  analyzedInstructions: string[];
   cheap: boolean;
   creditsText: string;
   cuisines: string[];
@@ -106,4 +105,5 @@ export interface DetailedMeal {
   extendedIngredients: ExtendedIngredient[];
   summary: string;
   winePairing: WinePairing;
+  nutritionWidgetHtml: string;
 }

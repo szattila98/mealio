@@ -33,12 +33,14 @@ defineEmits<{
     <div class="grid p-fluid">
       <div class="col-6 col-offset-3 p-fluid grid formgrid">
         <div class="field col-12">
-          <label for="targetCalories">Target Calories</label>
-          <InputNumber
-            id="targetCalories"
-            v-model="mealPlanInfo.targetCalories"
-            mode="decimal"
-          />
+          <span class="p-float-label">
+            <InputNumber
+              id="targetCalories"
+              v-model="mealPlanInfo.targetCalories"
+              mode="decimal"
+            />
+            <label for="targetCalories"><b>Target Calories</b></label>
+          </span>
         </div>
       </div>
 
