@@ -14,7 +14,7 @@ defineEmits<{
 
 <template>
   <div @click="$emit('card-click', meal)">
-    <Card style="width: 25em" class="border-1">
+    <Card style="width: 25em; height: 36em" class="border-1">
       <template #header>
         <img :src="meal.image" style="height: 15rem" />
       </template>
@@ -40,8 +40,4 @@ defineEmits<{
   </div>
 </template>
 
-<style>
-.p-card-footer {
-  line-height: 10%;
-}
-</style>
+<style></style>

@@ -4,6 +4,8 @@ import { ref } from "vue";
 import InputNumber from "primevue/inputnumber";
 import RadioButton from "primevue/radiobutton";
 import Button from "primevue/button";
+import Toast from "primevue/toast";
+import { useToast } from "primevue/usetoast";
 
 enum MenuOption {
   Standard = "",
@@ -23,12 +25,35 @@ const mealPlanInfo = ref<MealPlanInfo>({
   menuOption: MenuOption.Standard,
 });
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "meal-plan", info: MealPlanInfo): void;
 }>();
+
+const toast = useToast();
+
+function emitMealPlan() {
+  let errMsg = "";
+  if (
+    mealPlanInfo.value.targetCalories < 1200 ||
+    mealPlanInfo.value.targetCalories > 12000
+  ) {
+    errMsg = "Target calories must be between 1200 and 12000!";
+  }
+  if (!errMsg) {
+    emit("meal-plan", mealPlanInfo.value);
+  } else {
+    toast.add({
+      severity: "error",
+      summary: "Invalid target calories!",
+      detail: errMsg,
+      life: 5000,
+    });
+  }
+}
 </script>
 
 <template>
+  <Toast position="bottom-right" />
   <div>
     <div class="grid p-fluid">
       <div class="col-6 col-offset-3 p-fluid grid formgrid">
@@ -88,7 +113,7 @@ defineEmits<{
       </div>
 
       <div class="col-6 col-offset-3">
-        <Button label="Get meals" @click="$emit('meal-plan', mealPlanInfo)" />
+        <Button label="Get meals" @click="emitMealPlan" />
       </div>
     </div>
   </div>

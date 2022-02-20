@@ -2,20 +2,23 @@
 import { ref } from "vue";
 import Button from "primevue/button";
 import Divider from "primevue/divider";
+import Dialog from "primevue/dialog";
 import MealPlannerForm from "@/components/MealPlannerForm.vue";
 import MealCard from "@/components/MealCard.vue";
 import MealDetails from "../components/MealDetails.vue";
 import { useMeals } from "@/stores/mealStore";
 import {
-  getMealInfoBulk,
   getMealPlan,
+  getMealInfoBulk,
   getNutritionWidgetHtml,
 } from "@/api/spoonacular";
 import type { DetailedMeal } from "@/app";
+import { useErrors } from "@/stores/errorStore";
 
 const showForm = ref<boolean>(true);
 const mealDetailToShow = ref<DetailedMeal | null>(null);
 
+const errorStore = useErrors();
 const mealStore = useMeals();
 
 function toggleShowForm() {
@@ -38,9 +41,20 @@ function fetch_meals(targetCalories: number, menuOption: string) {
     })
     .then(() => {
       if (mealStore.ids) {
-        getMealInfoBulk(mealStore.ids).then((data) => {
-          mealStore.detailedMeals = data;
-        });
+        getMealInfoBulk(mealStore.ids)
+          .then((data) => {
+            mealStore.detailedMeals = data;
+          })
+          .catch((err) => {
+            if (err.response.status === 402) {
+              errorStore.quotaExceededApiError = true;
+            }
+          });
+      }
+    })
+    .catch((err) => {
+      if (err.response.status === 402) {
+        errorStore.quotaExceededApiError = true;
       }
     });
 }
@@ -50,9 +64,13 @@ function showDetails(meal: DetailedMeal) {
     mealDetailToShow.value = null;
   } else {
     if (!meal.nutritionWidgetHtml) {
-      getNutritionWidgetHtml(meal.id).then(
-        (data) => (meal.nutritionWidgetHtml = data)
-      );
+      getNutritionWidgetHtml(meal.id)
+        .then((data) => (meal.nutritionWidgetHtml = data))
+        .catch((err) => {
+          if (err.response.status === 402) {
+            errorStore.quotaExceededApiError = true;
+          }
+        });
     }
     mealDetailToShow.value = meal;
   }
@@ -132,4 +150,19 @@ function showDetails(meal: DetailedMeal) {
       <MealDetails :meal="mealDetailToShow" />
     </div>
   </div>
+
+  <Dialog
+    header="Fatal Error!"
+    v-model:visible="errorStore.quotaExceededApiError"
+    :modal="true"
+    :draggable="false"
+  >
+    <div class="flex align-items-center justify-content-center">
+      <i class="pi pi-clock mr-3" style="font-size: 2rem" />
+      <span
+        >Spoonacular free API quota exceeded, sorry for the inconvenience! Check
+        back tomorrow!</span
+      >
+    </div>
+  </Dialog>
 </template>
