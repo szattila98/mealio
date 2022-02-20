@@ -1,22 +1,43 @@
 <script setup lang="ts">
 import type { DetailedMeal } from "@/app";
+import { ref } from "vue";
 import Card from "primevue/card";
 import Tag from "primevue/tag";
+import Skeleton from "primevue/skeleton";
 
 defineProps<{
   meal: DetailedMeal;
+  isSelected: boolean;
 }>();
 
 defineEmits<{
   (e: "card-click", meal: DetailedMeal): void;
 }>();
+
+const imgLoaded = ref<boolean>(false);
+
+function onImgLoad() {
+  imgLoaded.value = true;
+}
 </script>
 
 <template>
-  <div @click="$emit('card-click', meal)">
-    <Card style="width: 25em; height: 36em" class="border-1">
+  <div
+    @click="$emit('card-click', meal)"
+    v-tooltip.bottom="{ value: 'Click for details!', disabled: isSelected }"
+  >
+    <Card
+      class="border-1 shadow-3"
+      :class="{ card: !isSelected, cardSelected: isSelected }"
+    >
       <template #header>
-        <img :src="meal.image" style="height: 15rem" />
+        <img
+          :src="meal.image"
+          style="height: 15em"
+          @load="onImgLoad()"
+          v-show="imgLoaded"
+        />
+        <Skeleton height="15em" v-show="!imgLoaded" />
       </template>
       <template #title> {{ meal.title }} </template>
       <template #subtitle>
@@ -40,4 +61,21 @@ defineEmits<{
   </div>
 </template>
 
-<style></style>
+<style>
+.card {
+  width: 25em;
+  height: 36em;
+  cursor: pointer;
+}
+
+.card:hover {
+  background-color: var(--surface-hover);
+}
+
+.cardSelected {
+  width: 25em;
+  height: 36em;
+  background-color: var(--surface-hover);
+  cursor: pointer;
+}
+</style>

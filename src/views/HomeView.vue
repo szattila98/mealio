@@ -3,6 +3,8 @@ import { ref } from "vue";
 import Button from "primevue/button";
 import Divider from "primevue/divider";
 import Dialog from "primevue/dialog";
+import ScrollTop from "primevue/scrolltop";
+import Skeleton from "primevue/skeleton";
 import MealPlannerForm from "@/components/MealPlannerForm.vue";
 import MealCard from "@/components/MealCard.vue";
 import MealDetails from "../components/MealDetails.vue";
@@ -73,35 +75,48 @@ function showDetails(meal: DetailedMeal) {
         });
     }
     mealDetailToShow.value = meal;
+    setTimeout(() => scrollDown(), 50);
   }
+}
+
+function scrollDown() {
+  window.scroll({
+    top: document.body.scrollHeight,
+    left: 0,
+    behavior: "smooth",
+  });
 }
 </script>
 
 <template>
+  <ScrollTop icon="pi pi-arrow-up" />
   <div
-    class="flex flex-row flex-wrap xl:justify-content-start lg:justify-content-start justify-content-center"
+    class="flex flex-row flex-wrap xl:justify-content-start lg:justify-content-start justify-content-center ml-3 fadein"
   >
     <Button
       icon="pi pi-list"
       class="p-button-rounded p-button-success m-2"
       v-if="showForm && mealStore.detailedMeals"
       @click="toggleShowForm"
+      v-tooltip.top="'To meals'"
     />
     <Button
       icon="pi pi-arrow-left"
       class="p-button-rounded m-2"
       v-if="!showForm"
       @click="toggleShowForm"
+      v-tooltip.top="'To planning'"
     />
     <Button
       icon="pi pi-trash"
       class="p-button-rounded p-button-danger m-2"
       v-if="mealStore.detailedMeals"
       @click="deleteMenu"
+      v-tooltip.top="'Delete plan'"
     />
   </div>
 
-  <div v-if="showForm" class="mt-6">
+  <div v-if="showForm" class="mt-6 fadein">
     <MealPlannerForm
       @meal-plan="
         (mealPlanInfo) => {
@@ -111,36 +126,52 @@ function showDetails(meal: DetailedMeal) {
     />
   </div>
 
-  <div v-else>
-    <div
-      class="col-8 col-offset-2 flex justify-content-between flex-wrap"
-      v-if="mealStore.plannedMeals?.nutrients"
-    >
-      <span
-        ><b>Calories:</b>
-        {{ mealStore.plannedMeals.nutrients.calories }} kcal</span
+  <div v-else class="fadein">
+    <div>
+      <div
+        class="col-8 col-offset-2 flex justify-content-between flex-wrap nutrients"
+        v-if="mealStore.plannedMeals?.nutrients"
       >
-      <span
-        ><b>Carbohydrates:</b>
-        {{ mealStore.plannedMeals.nutrients.carbohydrates }}g</span
-      >
-      <span><b>Fat:</b> {{ mealStore.plannedMeals.nutrients.fat }}g</span>
-      <span
-        ><b>Protein:</b> {{ mealStore.plannedMeals.nutrients.protein }}g</span
-      >
+        <span
+          ><b>Calories:</b>
+          {{ mealStore.plannedMeals.nutrients.calories }} kcal</span
+        >
+        <span
+          ><b>Carbohydrates:</b>
+          {{ mealStore.plannedMeals.nutrients.carbohydrates }}g</span
+        >
+        <span><b>Fat:</b> {{ mealStore.plannedMeals.nutrients.fat }}g</span>
+        <span
+          ><b>Protein:</b> {{ mealStore.plannedMeals.nutrients.protein }}g</span
+        >
+      </div>
+      <div v-else class="col-8 col-offset-2">
+        <Skeleton />
+      </div>
     </div>
 
-    <div
-      class="col-10 col-offset-1 flex justify-content-center flex-wrap"
-      v-if="mealStore.detailedMeals"
-    >
-      <MealCard
-        class="m-3"
-        v-for="(meal, index) in mealStore.detailedMeals"
-        v-bind:key="index"
-        :meal="meal"
-        @card-click="showDetails"
-      />
+    <div>
+      <div
+        v-if="mealStore.detailedMeals"
+        class="col-10 col-offset-1 flex justify-content-center flex-wrap"
+      >
+        <MealCard
+          class="m-3"
+          v-for="(meal, index) in mealStore.detailedMeals"
+          v-bind:key="index"
+          :meal="meal"
+          :is-selected="meal.id === mealDetailToShow?.id"
+          @card-click="showDetails"
+        />
+      </div>
+      <div
+        v-else
+        class="col-10 col-offset-1 flex justify-content-center flex-wrap"
+      >
+        <Skeleton width="25em" height="36em" class="m-3" />
+        <Skeleton width="25em" height="36em" class="m-3" />
+        <Skeleton width="25em" height="36em" class="m-3" />
+      </div>
     </div>
 
     <div v-if="mealDetailToShow">
@@ -166,3 +197,9 @@ function showDetails(meal: DetailedMeal) {
     </div>
   </Dialog>
 </template>
+
+<style>
+.nutrients {
+  font-size: 1.3rem;
+}
+</style>

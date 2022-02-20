@@ -63,8 +63,11 @@ function emitMealPlan() {
               id="targetCalories"
               v-model="mealPlanInfo.targetCalories"
               mode="decimal"
+              v-tooltip.left.focus="'Should be between 1200 and 12000'"
             />
-            <label for="targetCalories"><b>Target Calories</b></label>
+            <label for="targetCalories" class="text-lg"
+              ><b>Target Calories</b></label
+            >
           </span>
         </div>
       </div>
@@ -112,11 +115,20 @@ function emitMealPlan() {
         </div>
       </div>
 
-      <div class="col-6 col-offset-3">
-        <Button label="Get meals" @click="emitMealPlan" />
+      <div class="col-6 col-offset-3 flex justify-content-center">
+        <Button
+          label="Generate plan"
+          icon="pi pi-search"
+          @click="emitMealPlan"
+          class="p-button-outlined w-max"
+        />
       </div>
     </div>
   </div>
 </template>
 
-<style></style>
+<style>
+.p-tooltip-text {
+  text-align: center;
+}
+</style>

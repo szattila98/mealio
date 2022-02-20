@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DetailedMeal } from "@/app";
 import Panel from "primevue/panel";
+import Skeleton from "primevue/skeleton";
 
 defineProps<{ meal: DetailedMeal }>();
 </script>
@@ -68,10 +69,13 @@ defineProps<{ meal: DetailedMeal }>();
           <p v-html="meal.instructions"></p>
         </Panel>
       </div>
-      <div
-        class="flex align-items-center justify-content-center mt-2 mb-2"
-        v-html="meal.nutritionWidgetHtml"
-      />
+      <div class="flex align-items-center justify-content-center mt-2 mb-2">
+        <div
+          v-if="meal.nutritionWidgetHtml"
+          v-html="meal.nutritionWidgetHtml"
+        />
+        <Skeleton v-else height="700px" width="300px" />
+      </div>
     </div>
   </div>
 </template>
