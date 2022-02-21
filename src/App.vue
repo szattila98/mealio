@@ -11,6 +11,7 @@ import Button from "primevue/button";
     </div>
   </header>
   <RouterView />
+  <br /><br />
   <footer class="footer flex justify-content-center">
     <a href="https://spoonacular.com/food-api" target="_blank" class="m-3"
       >Spoonacular API</a
@@ -56,5 +57,6 @@ html {
   bottom: 0;
   width: 100%;
   text-align: center;
+  z-index: -1;
 }
 </style>
