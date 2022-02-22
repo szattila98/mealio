@@ -72,7 +72,9 @@ function emitMealPlan() {
         </div>
       </div>
 
-      <div class="col-6 col-offset-3 flex justify-content-evenly flex-wrap">
+      <div
+        class="col-6 col-offset-3 flex xl:justify-content-evenly xl:flex-row lg:justify-content-evenly lg:flex-row flex-column align-items-center flex-wrap"
+      >
         <div class="field-radiobutton">
           <RadioButton
             id="standard"

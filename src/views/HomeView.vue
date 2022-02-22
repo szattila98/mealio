@@ -129,19 +129,21 @@ function scrollDown() {
   <div v-else class="fadein">
     <div>
       <div
-        class="col-8 col-offset-2 flex justify-content-between flex-wrap nutrients"
+        class="col-8 col-offset-2 flex xl:justify-content-between xl:flex-row lg:justify-content-between lg:flex-row flex-column align-items-center flex-wrap nutrients"
         v-if="mealStore.plannedMeals?.nutrients"
       >
-        <span
+        <span class="mx-2"
           ><b>Calories:</b>
           {{ mealStore.plannedMeals.nutrients.calories }} kcal</span
         >
-        <span
+        <span class="mx-2"
           ><b>Carbohydrates:</b>
           {{ mealStore.plannedMeals.nutrients.carbohydrates }}g</span
         >
-        <span><b>Fat:</b> {{ mealStore.plannedMeals.nutrients.fat }}g</span>
-        <span
+        <span class="mx-2"
+          ><b>Fat:</b> {{ mealStore.plannedMeals.nutrients.fat }}g</span
+        >
+        <span class="mx-2"
           ><b>Protein:</b> {{ mealStore.plannedMeals.nutrients.protein }}g</span
         >
       </div>
