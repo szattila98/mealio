@@ -4,42 +4,49 @@ import Button from "primevue/button";
 </script>
 
 <template>
-  <header>
-    <div class="flex align-items-center justify-content-center">
-      <img src="@/assets/img/logo.svg" alt="Mealio Logo" class="logo" />
-      <span class="header-title m-2">Mealio</span>
-    </div>
-  </header>
-  <RouterView />
-  <br /><br />
-  <footer class="footer flex justify-content-center">
-    <a href="https://spoonacular.com/food-api" target="_blank" class="m-3"
-      >Spoonacular API</a
-    >
-    <a
-      href="https://github.com/szattila98/mealio"
-      target="_blank"
-      style="text-decoration: none"
-      class="top-100"
-    >
-      <Button
-        icon="pi pi-github"
-        class="p-button-rounded p-button-text p-button-plain"
-      />
-    </a>
-    <a
-      href="https://www.linkedin.com/in/szokeattila98"
-      target="_blank"
-      class="m-3"
-      >LinkedIn</a
-    >
-  </footer>
+  <div class="content">
+    <header>
+      <div class="flex align-items-center justify-content-center">
+        <img src="@/assets/img/logo.svg" alt="Mealio Logo" class="logo" />
+        <span class="header-title m-2">Mealio</span>
+      </div>
+    </header>
+    <RouterView />
+    <br /><br />
+    <footer class="footer flex justify-content-center">
+      <a href="https://spoonacular.com/food-api" target="_blank" class="m-3"
+        >Spoonacular API</a
+      >
+      <a
+        href="https://github.com/szattila98/mealio"
+        target="_blank"
+        style="text-decoration: none"
+        class="top-100"
+      >
+        <Button
+          icon="pi pi-github"
+          class="p-button-rounded p-button-text p-button-plain"
+        />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/szokeattila98"
+        target="_blank"
+        class="m-3"
+        >LinkedIn</a
+      >
+    </footer>
+  </div>
 </template>
 
 <style scoped>
 html {
   font-size: 18px;
   background: var(--surface-ground);
+}
+
+.content {
+  position: relative;
+  min-height: 98vh;
 }
 
 .logo {
@@ -52,11 +59,10 @@ html {
 }
 
 .footer {
-  position: fixed;
+  position: absolute;
   left: 0;
   bottom: 0;
   width: 100%;
   text-align: center;
-  z-index: -1;
 }
 </style>
